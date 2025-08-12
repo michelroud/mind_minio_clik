@@ -2,7 +2,7 @@ version: "3.3"
 
 services:
   mind_db:
-    image: mindsdb/mindsdb:latest
+    image: minddbp   # <<< Ton image perso
     container_name: mind_db
     user: root
     ports:
@@ -23,11 +23,37 @@ services:
     depends_on:
       - clickhouse
       - s3
-    entrypoint: /entrypoint.sh  
     volumes:
-      - ./entrypoint.sh:/entrypoint.sh
       - db_mind:/root/mdb_storage
       - ./config.json:/root/mindsdb_config.json
+
+  # mind_db:
+  #   image: mindsdb/mindsdb:latest
+  #   container_name: mind_db
+  #   user: root
+  #   ports:
+  #     - "47338:47338"  
+  #     - "47334:47334" 
+  #   environment:
+  #     MINDSDB_USERNAME: admin
+  #     MINDSDB_PASSWORD: passwords
+  #     AWS_ACCESS_KEY_ID: minio
+  #     AWS_SECRET_ACCESS_KEY: password
+  #     AWS_ENDPOINT_URL: http://s3:9000
+  #     BUCKET: mindmodel 
+  #     AWS_S3_USE_SSL: false
+  #     S3-SIGNATURE_VERSION: s3v4
+  #     AWS_S3-USE_SIGV4: true
+  #   networks:
+  #     - mind_clik
+  #   depends_on:
+  #     - clickhouse
+  #     - s3
+  #   entrypoint: /entrypoint.sh  
+  #   volumes:
+  #     - ./entrypoint.sh:/entrypoint.sh
+  #     - db_mind:/root/mdb_storage
+  #     - ./config.json:/root/mindsdb_config.json
 
   clickhouse:
     image: clickhouse/clickhouse-server
